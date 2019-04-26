@@ -158,18 +158,3 @@ gxemul -E oldtestmips -C R3000 -M 64 gxemul/vmlinux
 ```sh
 gxemul -E oldtestmips -C R3000 -M 64 -d gxemul/fs.img gxemul/vmlinux
 ```
-
-
-
-sudo update-binfmts --install i386 /usr/bin/qemu-i386-static --magic '\x7fELF\x01\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x03\x00\x01\x00\x00\x00' --mask '\xff\xff\xff\xff\xff\xff\xff\xfc\xff\xff\xff\xff\xff\xff\xff\xff\xf8\xff\xff\xff\xff\xff\xff\xff'
-
-作者：封尘印
-
-链接：https://www.zhihu.com/question/59818523/answer/348742772
-
-来源：知乎
-
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-
-

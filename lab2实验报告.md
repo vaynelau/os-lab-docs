@@ -118,9 +118,8 @@ int main()
 ## Thinking 2.7
 
 > 思考一下tlb_out 汇编函数，结合代码阐述一下跳转到NOFOUND的流程？
->
 
-首先将CP0_ENTRYHI寄存器中的内容暂时保存到k1寄存器中，然后将保存在a0寄存器中的参数即虚拟地址移动到CP0_ENTRYHI寄存器中，接下来调用tlpb指令，查询快表中是否有值为CP0_ENTRYHI的项，如果有则将其位置保存到CP0_INDEX中，如果没有则把CP0_INDEX高位置为1，然后取出CP0_INDEX寄存器中的值判断是否找到，如果此值小于0说明没有找到，通过bltz指令跳转到NOFOUND，如果找到则将CP0_ENTRYHI和CP0_ENTRYLO0寄存器置为0，使用tlbwi指令将CP0_ENTRYHI和CP0_ENTRYLOO写入快表中CP0_INDEX指向的位置。
+首先将CP0_ENTRYHI寄存器中的内容暂时保存到k1寄存器中，然后将保存在a0寄存器中的参数即虚拟地址移动到CP0_ENTRYHI寄存器中，接下来调用tlpb指令，查询快表中是否有值为CP0_ENTRYHI的项，如果有则将其位置保存到CP0_INDEX中，如果没有则把CP0_INDEX高位置为1，然后取出CP0_INDEX寄存器中的值判断是否找到，如果此值小于0说明没有找到，通过bltz指令跳转到NOFOUND，如果找到则将CP0_ENTRYHI和CP0_ENTRYLO0寄存器置为0，使用tlbwi指令将CP0_ENTRYHI和CP0_ENTRYLO0写入快表中CP0_INDEX指向的位置。
 
 ## Thinking 2.8
 

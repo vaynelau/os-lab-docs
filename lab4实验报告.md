@@ -26,16 +26,20 @@
 > - 但是子进程却没有执行fork() 之前父进程的代码，又说明了什么？
 >
 
- （1）说明fork执行后子进程与父进程的代码段和数据段都是相同的，二者是同一个程序，具有相同的状态和信息。
+（1）说明fork执行后子进程与父进程的代码段和数据段都是相同的，二者是同一个程序，具有相同的状态和信息。
 
 （2）说明子进程开始的位置和父，子进程的pc值为父进程epc寄存器保存的值，所以子进程会从父进程执行fork之后的位置开始执行。
 
 ## Thinking 4.3
 
 > 关于fork 函数的两个返回值，下面说法正确的是：
+>
 > A、fork 在父进程中被调用两次，产生两个返回值
+>
 > B、fork 在两个进程中分别被调用一次，产生两个不同的返回值
+>
 > C、fork 只在父进程中被调用了一次，在两个进程中各产生一个返回值
+>
 > D、fork 只在子进程中被调用了一次，在两个进程中各产生一个返回值
 
 C正确。首先父进程调用fork，fork函数会通过syscall陷入内核，然后执行sys_env_alloc函数，该函数申请一个子进程并将子进程的v0寄存器置0，然后向当前的父进程返回子进程的envid，之后两个进程都从sys_env_alloc系统调用之后的下一条指令开始执行，fork函数最终的返回值与sys_env_alloc函数对应，这样fork就在父子进程中产生了不同返回值。
@@ -138,7 +142,7 @@ vpd:
 
 # 四、指导书反馈
 
-对于env.c中env_free函数的最后一条语句LIST_REMOVE(e, env_sched_link)，如果进程在sched_yeild函数调度某一进程e执行时已经执行过一次LIST_REMOVE(e, env_sched_link)，则不能在函数env_free最后出现该语句，此时再次执行该语句可能会对现有的env_sched_list的结构产生影响。从LIST_REMOVE宏可以看出，`*(elm)->field.le_prev = LIST_NEXT((elm), field);`语句执行第二次时elm已经不在env_sched_list中，但可能导致将*(elm)->field.le_prev也就是env_sched_list的LIST_HEAD由本来指向另一个可调度的进程（第一次执行LIST_REMOVE之后新插入的进程）改为NULL，从而导致另一个一个进程无法被调度。
+对于env.c中env_free函数的最后一条语句LIST_REMOVE(e, env_sched_link)，如果进程在sched_yeild函数调度某一进程e执行之前已经执行过一次LIST_REMOVE(e, env_sched_link)将其从链表中删除，则不能在函数env_free最后出现该语句，此时再次执行该语句可能会对现有的env_sched_list的结构产生影响。从LIST_REMOVE宏可以看出，`*(elm)->field.le_prev = LIST_NEXT((elm), field);`语句执行第二次时elm已经不在env_sched_list中，但可能导致将*(elm)->field.le_prev也就是env_sched_list的LIST_HEAD由本来指向另一个可调度的进程（第一次执行LIST_REMOVE之后新插入的进程）改为NULL，从而导致另一个一个进程无法被调度。
 
 ```
 #define	LIST_REMOVE(elm, field) do {					\

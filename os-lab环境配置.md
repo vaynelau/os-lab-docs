@@ -158,3 +158,13 @@ gxemul -E oldtestmips -C R3000 -M 64 gxemul/vmlinux
 ```sh
 gxemul -E oldtestmips -C R3000 -M 64 -d gxemul/fs.img gxemul/vmlinux
 ```
+
+## 安装32位库
+
+生成磁盘文件时，需要先生成32位的可执行文件fsformat，可能需要安装相关的32位库：
+
+```sh
+sudo apt update
+sudo apt install libc6-dev-i386
+```
+
